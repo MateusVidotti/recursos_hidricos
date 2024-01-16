@@ -34,7 +34,7 @@ def get_geoglow_historic_forcast(reach_id) -> {}:
 	return response.json()
 
 
-def insert_forcasts(stream_id, correction_factor,  forcast):
+def insert_forcasts(stream_id, forcast):
 	"""Insert forcasts"""
 	time_series = forcast.json()['time_series']
 	inserts = []
@@ -55,13 +55,7 @@ def insert_forcasts(stream_id, correction_factor,  forcast):
 		nova_previsao["attributes"]['FLOW_AVG'] = time_series['flow_avg_m^3/s'][i]
 		nova_previsao["attributes"]['FLOW_MAX'] = time_series['flow_max_m^3/s'][i]
 		nova_previsao["attributes"]['FLOW_MIN'] = time_series['flow_min_m^3/s'][i]
-		# Correction factor
-		nova_previsao["attributes"]['FLOW_25_F'] = time_series['flow_25%_m^3/s'][i] * correction_factor
-		nova_previsao["attributes"]['FLOW_75_F'] = time_series['flow_75%_m^3/s'][i] * correction_factor
-		nova_previsao["attributes"]['FLOW_AVG_F'] = time_series['flow_avg_m^3/s'][i] * correction_factor
-		nova_previsao["attributes"]['FLOW_MAX_F'] = time_series['flow_max_m^3/s'][i] * correction_factor
-		nova_previsao["attributes"]['FLOW_MIN_F'] = time_series['flow_min_m^3/s'][i] * correction_factor
-
+		insert_features(URL_FORCAST, [nova_previsao])
 		inserts.append(nova_previsao)
 		i += 1
 	# format high forcast to insert
@@ -75,13 +69,13 @@ def insert_forcasts(stream_id, correction_factor,  forcast):
 		nova_previsao["attributes"]['DATA_CONSULTA'] = datetime.timestamp(datetime_consulta) * 1000
 		nova_previsao["attributes"]['DATA_PREVISAO'] = datetime.timestamp(datetime_previsao) * 1000
 		nova_previsao["attributes"]['FLOW_HIGH_RES'] = time_series['high_res'][i]
-		# Correction factor
-		nova_previsao["attributes"]['FLOW_HIGH_RES_F'] = time_series['high_res'][i] * correction_factor
 		inserts_high.append(nova_previsao)
+		insert_features(URL_FORCAST, [nova_previsao])
+
 		i += 1
 	# inserts
-	insert_features(URL_FORCAST, inserts)
-	insert_features(URL_FORCAST, inserts_high)
+	#insert_features(URL_FORCAST, inserts)
+	#insert_features(URL_FORCAST, inserts_high)
 	return inserts, inserts_high
 
 
@@ -106,9 +100,10 @@ def insert_records_forcasts(stream_id, correction_factor, r_forcasts):
 		nova_previsao["attributes"]['FLOW_MAX'] = None
 		nova_previsao["attributes"]['FLOW_MIN'] = None
 		inserts.append(nova_previsao)
+		insert_features(URL_FORCAST, [nova_previsao])
 		i += 1
 	# inserts
-	insert_features(URL_FORCAST, inserts)
+
 	return inserts
 
 

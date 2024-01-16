@@ -27,9 +27,9 @@ def requests_retry_session(
 
 
 def get_stream_nodes() -> {}:
-	"""Get stored stream_nodes"""
+	"""Get stored stream_nodes."""
 	s = requests.Session()
-	s.headers = {'Authorization': 'Bearer ' + TOKEN}
+	# s.headers = {'Authorization': 'Bearer ' + TOKEN}
 	s.params = {
 		"Where": '1=1',
 		'outFields': 'STREAM_ID, MUNICIPIO, UF, CIDADE, FATOR_CORRECAO',
@@ -44,6 +44,7 @@ def get_stream_nodes() -> {}:
 			feat['attributes']['CIDADE'],
 			feat['attributes']['FATOR_CORRECAO']
 		]
+
 	return streams
 
 
@@ -72,7 +73,7 @@ def get_geoglow_data() -> {}:
 def get_object_ids(url) -> {}:
 	"""Get objectids from a feature service."""
 	s = requests.Session()
-	s.headers = {'Authorization': 'Bearer ' + TOKEN}
+	# s.headers = {'Authorization': 'Bearer ' + TOKEN}
 	s.params = {
 		"Where": '1=1',
 		'outFields': 'OBJECTID',
@@ -95,7 +96,7 @@ def delete_all_features(url) -> {}:
 		'f': 'json'
 	}
 	s = requests.Session()
-	s.headers = {'Authorization': 'Bearer ' + TOKEN}
+	# s.headers = {'Authorization': 'Bearer ' + TOKEN}
 	requests_retry_session(session=s).post(f'{url}/deletefeatures', data=delete_payload)
 	ids = get_object_ids(url)
 	if len(ids) > 0:
@@ -106,7 +107,7 @@ def insert_features(url, inserts) -> {}:
 	"""Insert features."""
 	json_dumps_insert = json.dumps(inserts)
 	s = requests.Session()
-	s.headers = {'Authorization': 'Bearer ' + TOKEN}
+	# s.headers = {'Authorization': 'Bearer ' + TOKEN}
 	s.params = {
 		"features": json_dumps_insert,
 		"f": "json"

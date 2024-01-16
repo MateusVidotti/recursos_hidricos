@@ -14,14 +14,10 @@ logging.info('Novo processamento')
 def process_stream_node(stream_id):
     # get new forcast
     forcasts = get_geoglow_forcast(stream_id)
-    correction_factor = stream_nodes[stream_id][3]
     # store forcast
-    _insert_forcasts,  _insert_high_forcasts = insert_forcasts(stream_id, correction_factor, forcasts)
+    _insert_forcasts,  _insert_high_forcasts = insert_forcasts(stream_id, forcasts)
     # get record forcast
     r_forcasts = get_geoglow_record_forcast(stream_id, days_before=10)
-
-    # store record forcast
-    insert_records_forcasts(stream_id, correction_factor, r_forcasts)
 
 
 def stream_forcasts():
@@ -30,16 +26,16 @@ def stream_forcasts():
         resultado = list(tqdm.tqdm(p.imap(process_stream_node, stream_ids_list), total=len(stream_ids_list)))
         p.close()
         p.join()
+    # for stream_id in stream_nodes:
+    #     process_stream_node(stream_id)
 
 
 if __name__ == '__main__':
     # try:
     stream_nodes = get_stream_nodes()
     print('Limpando tabelas....')
-    # delete geoglow forcast
-    delete_all_features(URL_FORCAST)
     # delete climatempo forcast
     print('Tabelas limpas')
     # Process forcasts
     print('Processando')
-    stream_forcasts()
+    # stream_forcasts()
