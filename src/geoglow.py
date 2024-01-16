@@ -79,7 +79,7 @@ def insert_forcasts(stream_id, forcast):
 	return inserts, inserts_high
 
 
-def insert_records_forcasts(stream_id, correction_factor, r_forcasts):
+def insert_records_forcasts(stream_id, r_forcasts):
 	"""Insert record forcast days before today"""
 	time_series = r_forcasts.json()['time_series']
 	inserts = []
@@ -96,7 +96,6 @@ def insert_records_forcasts(stream_id, correction_factor, r_forcasts):
 		nova_previsao["attributes"]['FLOW_25'] = None
 		nova_previsao["attributes"]['FLOW_75'] = None
 		nova_previsao["attributes"]['FLOW_AVG'] = time_series['flow'][i]
-		nova_previsao["attributes"]['FLOW_AVG_F'] = time_series['flow'][i] * correction_factor
 		nova_previsao["attributes"]['FLOW_MAX'] = None
 		nova_previsao["attributes"]['FLOW_MIN'] = None
 		inserts.append(nova_previsao)

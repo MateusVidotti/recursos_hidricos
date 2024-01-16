@@ -18,6 +18,7 @@ def process_stream_node(stream_id):
     _insert_forcasts,  _insert_high_forcasts = insert_forcasts(stream_id, forcasts)
     # get record forcast
     r_forcasts = get_geoglow_record_forcast(stream_id, days_before=10)
+    insert_records_forcasts(stream_id, r_forcasts)
 
 
 def stream_forcasts():
@@ -35,7 +36,8 @@ if __name__ == '__main__':
     stream_nodes = get_stream_nodes()
     print('Limpando tabelas....')
     # delete climatempo forcast
+    delete_all_features(URL_FORCAST)
     print('Tabelas limpas')
     # Process forcasts
     print('Processando')
-    # stream_forcasts()
+    stream_forcasts()
